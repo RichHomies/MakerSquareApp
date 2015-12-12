@@ -66,28 +66,19 @@ function clearLocalStorage(webContents){
 }
 
 function init (mainWindow) {
-  //get code
-    //get from local storage
-  //if response=good
-    //load page
-  //if response =not good
-    //get code from github
-    //load page
   ASQ(function(done){
     getGithubTokenFromLocalStorage(mainWindow.webContents, done)
   })
   .then(function(done, data){
     console.log('data from git', data);
     if(data){
-      console.log('got it');
+
       mainWindow.loadURL(`file://${__dirname}/public/index.html`);
     } else {
-      console.log('ayyo')
       directToGithub(mainWindow, done)
     }
   })  
   .then(function(done, code){
-    console.log('code ', code);  
     setTokenInLocalStorage(mainWindow.webContents, code, done)
   })
   .then(function(done, code){
@@ -99,4 +90,7 @@ function init (mainWindow) {
 }
 
 
-module.exports = {init: init}
+module.exports = {
+  init: init,
+  getGithubTokenFromLocalStorage : getGithubTokenFromLocalStorage
+  }
