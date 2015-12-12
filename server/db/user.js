@@ -9,6 +9,7 @@ var userSchema = new mongoose.Schema({
     tokens: {
       github: {type: String, default: ''}
     },
+    code: {String , default: ''},
     creationDate :  {type: Date, default: Date.now()}
 });
 
