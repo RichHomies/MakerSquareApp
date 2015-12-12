@@ -4,7 +4,6 @@ const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const init = require('./init');
-const ASQ = require('asynquence')
 
 
 // Report crashes to our server.
@@ -27,37 +26,27 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   // Create the rowser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600, show: false});
-
-
+  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow.webContents.on('did-stop-loading', function(event, url) {
+    console.log('webcontents url', mainWindow.webContents.getURL())
+    var urlArray = mainWindow.webContents.getURL().split('electron/public/')
+    var currentWindowLocation = urlArray[urlArray.length - 1]
+    console.log('current window location', currentWindowLocation)
+    if (currentWindowLocation.indexOf('landing.html') !== -1) {
+      console.log('truuu')
+      init.init(mainWindow)
+    } else {
+      console.log('dam son')
+    }
+  })
+  mainWindow.loadURL(`file://${__dirname}/public/landing.html`);
 
   // if we have github cookie
   //   open mksHomePage
   // else
   //   direct to githubauth
 
-  ASQ(function(done){
-    init.getGithubTokenFromLocalStorage(mainWindow.webContents, done)
-  })
-  .then(function(done, data){
-    console.log('data from git', data);
-    if(data){
-      console.log('got it');
-      mainWindow.loadURL(`file://${__dirname}/public/index.html`);
-    } else {
-      init.directToGithub(mainWindow, done)
-    }
-  })  
-  .then(function(done, token){
-    console.log('token ', token);  
-    init.setTokenInLocalStorage(mainWindow.webContents, token, done)
-  })
-  .then(function(done, token){
-    mainWindow.loadURL(`file://${__dirname}/public/index.html`);
-  })
-  .or(function(err){
-    console.log('err ', err)
-  })
+  
 
 
   // Open the DevTools.

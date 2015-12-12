@@ -1,10 +1,9 @@
-import {Link} from 'react-router'
 class Home extends React.Component {
   render() {
+    console.log('window', Object.keys(document))
     return (
       <div>
         This is Home.
-        <Link to="/"> Go to Login</Link>
       </div>
     )
   }
