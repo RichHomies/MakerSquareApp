@@ -1,5 +1,12 @@
 import alt from '../alt';
 import $ from 'jquery'
+function formatAnnouncementObject(announcement, username, _id){
+  return {
+    text : announcement,
+    userName : username,
+    _id : _id
+  }
+}
 
 class HomeActions {
   constructor() {
@@ -25,13 +32,12 @@ class HomeActions {
       this.actions.getUserDataFail(jqXhr.responseJSON.message);
     })
   }
-  postAnnouncement(announcement) {
-    let socket = io();
-    console.log(announcement)
-    socket.emit('saveAnnouncementToDb', announcement)
+  postAnnouncement(announcement) {    
+    var announcementObj = formatAnnouncementObject(announcement, alt.stores.HomeStore.state.name,alt.stores.HomeStore.state._id)
+    socket.emit('saveAnnouncementToDb', announcementObj)
   }
-  getLinksAndAnnouncements() {
-    let socket = io();
+  getLinksAndAnnouncements(link) {
+    // let socket = io();
     socket.emit('getAnnouncementsLinks');
     socket.on('linksAnnouncements', function(data) {
       if (data) {

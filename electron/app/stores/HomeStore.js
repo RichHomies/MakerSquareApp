@@ -19,6 +19,7 @@ class HomeStore {
     this.name = data.user.name
     this.avatar_url = data.user.avatar_url
     this.loaded = true;
+    this._id =  data.user._id
   }
   onGetUserDataFail(errorMessage) {
     console.log('fail', errorMessage)

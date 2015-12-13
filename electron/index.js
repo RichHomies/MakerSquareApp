@@ -8,7 +8,6 @@ const init = require('./init');
 const ipcChannel = require('./ipcChannel');
 
 
-
 // Report crashes to our server.
 electron.crashReporter.start();
 
@@ -55,3 +54,7 @@ app.on('ready', function() {
     mainWindow = null;
   });
 });
+
+
+
+ 

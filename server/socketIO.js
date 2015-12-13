@@ -1,7 +1,7 @@
 var ASQ = require('asynquence')
 var db = require('./controller/db')
 
-function emitToClient(type, data){
+function emitToClient(socket, type, data){
   socket.emit(type, data);
 }
 
@@ -9,6 +9,8 @@ function emitToClient(type, data){
 function setup(io){
   io.on('connection', function (socket) {
   
+  console.log('connected! in setup');
+
     socket.on('getAnnouncementsLinks', function (data) {
       ASQ("")
       .all( // or `.gate(..)`
@@ -27,14 +29,20 @@ function setup(io){
       )
       .val(function(links, announcements){
         //emit to client
-        emitToClient('linksAnnouncements', {announcements: announcements, links: links})
+        // emitToClient(socket ,'linksAnnouncements', {announcements: announcements, links: links})
       });
             
     });
 
-    socket.on('saveAnnouncementToDb', function (data) {
-      console.log(data);
-      // db.save('announcement', data);
+    socket.on('saveAnnouncementToDb', function (announcementObj) {
+      console.log('announcement', announcementObj);
+      db.save('announcement', announcementObj)
+        .then(function(data){
+          console.log('success', data);
+        })
+        .catch(function(err){
+          console.log('shit', err)
+        })
     });
 
     socket.on('saveLinkToDb', function (data) {
