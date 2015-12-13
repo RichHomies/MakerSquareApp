@@ -1,2 +1,2 @@
 node_modules
-electron/public/lib
+.DS_Store

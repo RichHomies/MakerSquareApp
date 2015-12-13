@@ -4,8 +4,11 @@ import $ from 'jquery'
 class HomeActions {
   constructor() {
     this.generateActions(
-      'onGetUserDataSuccess',
-      'onGetUserDataFail'
+      'getUserDataSuccess',
+      'getUserDataFail',
+      'getLinksAndAnnouncementsSuccess',
+      'getLinksAndAnnouncementsFail',
+      'updateAnnouncementPost'
       )
   }
   getUserData(code) {
@@ -16,10 +19,26 @@ class HomeActions {
       data: { code: code }
     })
     .done((data) => {
-      this.actions.onGetUserDataSuccess(data)
+      this.actions.getUserDataSuccess(data)
     })
     .fail((jqXhr) => {
-      this.actions.onGetUserDataFail(jqXhr.responseJSON.message);
+      this.actions.getUserDataFail(jqXhr.responseJSON.message);
+    })
+  }
+  postAnnouncement(announcement) {
+    let socket = io();
+    console.log(announcement)
+    socket.emit('saveAnnouncementToDb', announcement)
+  }
+  getLinksAndAnnouncements() {
+    let socket = io();
+    socket.emit('getAnnouncementsLinks');
+    socket.on('linksAnnouncements', function(data) {
+      if (data) {
+        this.actions.getLinksAnnouncementsSuccess(data)
+      } else {
+        this.actions.getLinksAndAnnouncementsFail()
+      }
     })
   }
 }
