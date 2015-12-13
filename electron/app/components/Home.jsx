@@ -14,6 +14,7 @@ class Home extends React.Component {
   }
   componentDidMount() {
     HomeStore.listen(this.onChange);
+    HomeActions.getLinksAndAnnouncements()
     ipcRenderer.send('asynchronous-message', {type: 'request' ,method: 'GET', resource: 'githubToken'});
     ipcRenderer.on('asynchronous-reply', function(event, arg) {
       console.log('render process replied', arg)
@@ -27,7 +28,9 @@ class Home extends React.Component {
     return (
       <div>
         <Loader loaded={this.state.loaded}>
-          Hello!
+          Hello {this.state.name}! Here is your profile picture:
+          <img className="ui avatar image" src={this.state.avatar_url}></img>
+          <span>{this.state.username}</span>
         </Loader>
       </div>
     )
