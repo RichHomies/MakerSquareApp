@@ -22,6 +22,7 @@ mongoose.connect(config.database);
 mongoose.connection.on('error', function(){
   console.info('couldnt connect, try running mongod');
 });
+app.use(cors());
 app.use(morgan('tiny'));
 app.use(parser.json());
 app.use(parser.urlencoded({extended: false}));

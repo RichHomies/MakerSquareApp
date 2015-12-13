@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
     userName : String,
+    name: String,
+    avatar_url: String,
     role : {
       studentOrAdminRights: {String, default: ''},
       cohort: {String , default: ''}
@@ -13,4 +15,4 @@ var userSchema = new mongoose.Schema({
     creationDate :  {type: Date, default: Date.now()}
 });
 
-modules.exports = mongoose.model('userModel', userSchema);
+module.exports = mongoose.model('userModel', userSchema);

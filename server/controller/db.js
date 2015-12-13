@@ -2,7 +2,7 @@ var User = require('../db/user')
 var Links = require('../db/links')
 var Announcements = require('../db/announcement')
 var mongoose = require('mongoose')
-var ASQ = require('ASQ')
+var ASQ = require('asynquence')
       //if user doesn't exist
           //ping github for auth ish
             //error-  pass to client
@@ -12,10 +12,12 @@ var ASQ = require('ASQ')
           //return user obj to client
 
 function getUser (req, res, next){
+  console.log('in getUser', req.body.code)
   var code = req.body.code
   User.findOne({code: code}).exec()
     .then(function(user){
-      if(user._id){
+      console.log('this is the user', user)
+      if(user){
         res.status(200).json({user: user})
       } else {
         next();
@@ -25,21 +27,24 @@ function getUser (req, res, next){
 
 
 function createUser (req, res){
+  var isAlexJeng = res.loginName === 'AlexJeng' ? 'admin' : 'student'
   var userGithubProfile = {
-    userName : res.userName,
+    name : res.name,
+    userName: res.loginName,
+    avatar_url: res.avatar_url,
     role : {
-      studentOrAdminRights : res.role.studentOrAdminRights,
-      cohort : res.role.cohort
+      studentOrAdminRights : isAlexJeng,
     },
     tokens : {
-      github : res.tokens.gihub
+      github : res.github
     },
     code : req.body.code
   }
-
+  console.log('userGithubProfile', userGithubProfile)
   var newUser = new User(userGithubProfile)
   newUser.save()
     .then(function(user){
+      user.tokens.github = null
       res.status(200).json({user: user})
     })
 }

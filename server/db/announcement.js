@@ -10,4 +10,4 @@ var announcementSchema = new mongoose.Schema({
     creationDate :  {type: Date, default: Date.now()}
 });
 
-modules.exports = mongoose.model('announcementModel', announcementSchema);
+module.exports = mongoose.model('announcementModel', announcementSchema);

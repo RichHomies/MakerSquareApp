@@ -3,6 +3,7 @@ const ASQ = require('asynquence')
 
 function initializeChannel(ipcMain, webContents){
   ipcMain.on('asynchronous-message', function(event, arg) {
+    console.log('recieved message', arg)
     if(arg.method === 'GET' && arg.resource === 'githubToken'){
       ASQ(function(done){
         init.getGithubTokenFromLocalStorage(webContents, done)

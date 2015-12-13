@@ -10,4 +10,4 @@ var linksSchema = new mongoose.Schema({
     creationDate :  {type: Date, default: Date.now()}
 });
 
-modules.exports = mongoose.model('linkModel', linksSchema);
+module.exports = mongoose.model('linkModel', linksSchema);
