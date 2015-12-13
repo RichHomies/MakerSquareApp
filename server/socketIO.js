@@ -34,7 +34,7 @@ function setup(io){
 
     socket.on('saveAnnouncementToDb', function (data) {
       console.log(data);
-      db.save('announcement', data);
+      // db.save('announcement', data);
     });
 
     socket.on('saveLinkToDb', function (data) {

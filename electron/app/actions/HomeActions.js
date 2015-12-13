@@ -7,7 +7,8 @@ class HomeActions {
       'getUserDataSuccess',
       'getUserDataFail',
       'getLinksAndAnnouncementsSuccess',
-      'getLinksAndAnnouncementsFail'
+      'getLinksAndAnnouncementsFail',
+      'updateAnnouncementPost'
       )
   }
   getUserData(code) {
@@ -23,6 +24,11 @@ class HomeActions {
     .fail((jqXhr) => {
       this.actions.getUserDataFail(jqXhr.responseJSON.message);
     })
+  }
+  postAnnouncement(announcement) {
+    let socket = io();
+    console.log(announcement)
+    socket.emit('saveAnnouncementToDb', announcement)
   }
   getLinksAndAnnouncements() {
     let socket = io();

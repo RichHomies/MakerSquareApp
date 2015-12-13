@@ -11,6 +11,7 @@ class HomeStore {
     this.avatar_url = ''
     this.name = ''
     this.roles = ''
+    this.announcementPost
   }
   onGetUserDataSuccess(data) {
     console.log('SUCCESS', data)
@@ -29,6 +30,9 @@ class HomeStore {
   }
   onGetLinksAndAnnouncementsFail() {
     console.log('UH OH')
+  }
+  onUpdateAnnouncementPost(event) {
+    this.announcementPost = event.target.value
   }
 }
 

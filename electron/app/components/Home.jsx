@@ -24,6 +24,13 @@ class Home extends React.Component {
   componentWillUnmount() {
     HomeStore.unlisten(this.onChange);
   }
+  handleSubmit(event) {
+    event.preventDefault();
+    var announcementPost = this.state.announcementPost.trim();
+    if (announcementPost) {
+      HomeActions.postAnnouncement(announcementPost)
+    }
+  }
   render() {
     return (
       <div>
@@ -31,6 +38,10 @@ class Home extends React.Component {
           Hello {this.state.name}! Here is your profile picture:
           <img className="ui avatar image" src={this.state.avatar_url}></img>
           <span>{this.state.username}</span>
+          <form onSubmit={this.handleSubmit.bind(this)}>
+            <input value={this.state.announcementPost} onChange={HomeActions.updateAnnouncementPost}></input>
+            <button type="submit">Submit</button>
+          </form>
         </Loader>
       </div>
     )
