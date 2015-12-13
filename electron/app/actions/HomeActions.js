@@ -8,7 +8,6 @@ class HomeActions {
       'getLinksFail'
       )
   }
-  getAnnounceme
 }
 
 export default alt.createActions(HomeActions);
