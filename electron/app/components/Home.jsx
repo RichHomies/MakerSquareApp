@@ -14,7 +14,15 @@ class Home extends React.Component {
   }
   componentDidMount() {
     HomeStore.listen(this.onChange);
-    HomeActions.getLinksAndAnnouncements()
+    connectToSocketOnServer
+      .then(function(status){
+        if(status === 'connected!') {
+          HomeActions.getLinksAndAnnouncements()
+        }
+      })
+      .catch(function(err){
+        console.log('error')
+      })
     ipcRenderer.send('asynchronous-message', {type: 'request' ,method: 'GET', resource: 'githubToken'});
     ipcRenderer.on('asynchronous-reply', function(event, arg) {
       console.log('render process replied', arg)

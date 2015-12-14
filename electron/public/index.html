@@ -17,10 +17,14 @@
   <script>
     require('babel/register');
     var React = require('react');
+    var Promise = require("bluebird")
+    var socket = io.connect('http://localhost:8080')
+    var connectToSocketOnServer = new Promise(function(resolve, reject){
+      socket.on('connect',function(){
+        console.log('connected!')
+        resolve('connected!')
+      })
+    });
     var Main = require('../app/main.jsx');
-    var socket = io.connect('http://localhost:8080');
-    socket.on('connect',function(){
-      console.log('connected!')
-    })
   </script>
 </html>

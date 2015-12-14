@@ -37,15 +37,16 @@ class HomeActions {
     socket.emit('saveAnnouncementToDb', announcementObj)
   }
   getLinksAndAnnouncements(link) {
-    // let socket = io();
-    socket.emit('getAnnouncementsLinks');
+    console.log('getting links and announcements')
     socket.on('linksAnnouncements', function(data) {
       if (data) {
+        console.log('linksAnnouncements data', data);
         this.actions.getLinksAnnouncementsSuccess(data)
       } else {
         this.actions.getLinksAndAnnouncementsFail()
       }
     })
+    socket.emit('getAnnouncementsLinks')
   }
 }
 

@@ -11,17 +11,18 @@ function setup(io){
   
   console.log('connected! in setup');
 
-    socket.on('getAnnouncementsLinks', function (data) {
+    socket.on('getAnnouncementsLinks', function () {
+      console.log('getting links and annoucnemtsn')
       ASQ("")
       .all( // or `.gate(..)`
           function(done,msg){
-            fetch('link')
+            db.fetch('link')
               .then(function(links){
                 done(links)
               })  
           },
           function(done,msg){
-            fetch('announcement')
+            db.fetch('announcement')
               .then(function(announcements){
                 done(announcements)
               })
@@ -29,7 +30,8 @@ function setup(io){
       )
       .val(function(links, announcements){
         //emit to client
-        // emitToClient(socket ,'linksAnnouncements', {announcements: announcements, links: links})
+        console.log('fixing to emit');
+        emitToClient(socket ,'linksAnnouncements', {announcements: announcements, links: links})
       });
             
     });

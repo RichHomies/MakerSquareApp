@@ -51,7 +51,6 @@ function createUser (req, res){
 }
 
 function save(type, data) {
-  //need to format data
   return saveToDb(model[type], data)
 }
 
