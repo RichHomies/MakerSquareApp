@@ -7,6 +7,14 @@ function formatAnnouncementObject(announcement, username, _id){
     _id : _id
   }
 }
+function formatLinkObject(text, url, username, _id){
+  return {
+    text : announcement,
+    userName : username,
+    _id : _id
+  }
+}
+
 
 class HomeActions {
   constructor() {
@@ -33,8 +41,12 @@ class HomeActions {
     })
   }
   postAnnouncement(announcement) {    
-    var announcementObj = formatAnnouncementObject(announcement, alt.stores.HomeStore.state.name,alt.stores.HomeStore.state._id)
-    socket.emit('saveAnnouncementToDb', announcementObj)
+    var announcementObject = formatAnnouncementObject(announcement, alt.stores.HomeStore.state.name,alt.stores.HomeStore.state._id)
+    socket.emit('saveAnnouncementToDb', announcementObject)
+  }
+  postLink(text, url) {    
+    var linkObject = formatLinkObject(text, url, alt.stores.HomeStore.state.name, alt.stores.HomeStore.state._id)
+    socket.emit('saveLinkToDb', linkObject)
   }
   getLinksAndAnnouncements(link) {
     console.log('getting links and announcements')
