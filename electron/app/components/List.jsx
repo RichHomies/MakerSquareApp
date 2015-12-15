@@ -1,9 +1,9 @@
 
 class List extends React.Component {
   render() {
-    var links = this.props.links.map(function(link){
+    var links = this.props.links.map(function(link, i){
       return (
-        <li><a src={link.url}>{link.text}</a></li>
+        <li><a key={i} src={link.url}>{link.text}</a></li>
         )
     })
     return (

@@ -9,6 +9,7 @@ var model = {
 }
 
 function saveToDb (model, dataObj){
+  console.log('savetodb')
   var item = new model(dataObj);
   return item.save()
 }
@@ -51,6 +52,7 @@ function createUser (req, res){
 }
 
 function save(type, data) {
+  console.log('saving')
   return saveToDb(model[type], data)
 }
 

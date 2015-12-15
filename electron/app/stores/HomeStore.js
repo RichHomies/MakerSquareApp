@@ -11,7 +11,7 @@ class HomeStore {
     this.avatar_url = ''
     this.name = ''
     this.roles = ''
-    this.announcementPost
+    this.announcementPost = ''
   }
   onGetUserDataSuccess(data) {
     console.log('SUCCESS', data)
@@ -24,17 +24,22 @@ class HomeStore {
   onGetUserDataFail(errorMessage) {
     console.log('fail', errorMessage)
   }
-  onGetLinksAndAnnouncementsSuccess(data) {
-    console.log(data)
+  onGetLinksAnnouncementsSuccess(data) {
+    console.log('get links announcements success', data)
     this.links = data.links
     this.announcements = data.announcements
   }
-  onGetLinksAndAnnouncementsFail() {
+  onGetLinksAnnouncementsFail() {
     console.log('UH OH')
   }
   onUpdateAnnouncementPost(event) {
     this.announcementPost = event.target.value
   }
+  onUpdateAnnouncements(announcements) {
+    console.log('announcements', announcements)
+    this.announcements = announcements.announcements
+  }
+
 }
 
 

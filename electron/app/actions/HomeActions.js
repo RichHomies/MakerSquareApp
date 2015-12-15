@@ -4,7 +4,7 @@ function formatAnnouncementObject(announcement, username, _id){
   return {
     text : announcement,
     userName : username,
-    _id : _id
+    userId : _id
   }
 }
 function formatLinkObject(text, url, username, _id){
@@ -21,9 +21,11 @@ class HomeActions {
     this.generateActions(
       'getUserDataSuccess',
       'getUserDataFail',
-      'getLinksAndAnnouncementsSuccess',
-      'getLinksAndAnnouncementsFail',
-      'updateAnnouncementPost'
+      'getLinksAnnouncementsSuccess',
+      'getLinksAnnouncementsFail',
+      'updateAnnouncementPost',
+      'updateAnnouncements'
+
       )
   }
   getUserData(code) {
@@ -48,14 +50,16 @@ class HomeActions {
     var linkObject = formatLinkObject(text, url, alt.stores.HomeStore.state.name, alt.stores.HomeStore.state._id)
     socket.emit('saveLinkToDb', linkObject)
   }
-  getLinksAndAnnouncements(link) {
+  getLinksAnnouncements(link) {
     console.log('getting links and announcements')
+    var that = this;
     socket.on('linksAnnouncements', function(data) {
       if (data) {
         console.log('linksAnnouncements data', data);
-        this.actions.getLinksAnnouncementsSuccess(data)
+        console.log('actions functions', that.actions);
+        that.actions.getLinksAnnouncementsSuccess(data)
       } else {
-        this.actions.getLinksAndAnnouncementsFail()
+        that.actions.getLinksAnnouncementsFail()
       }
     })
     socket.emit('getAnnouncementsLinks')

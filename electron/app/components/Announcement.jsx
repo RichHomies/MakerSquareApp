@@ -1,9 +1,9 @@
 
 class Announcement extends React.Component {
   render() {
-    var announcements = this.props.announcements.map(function(announcement){
+    var announcements = this.props.announcements.map(function(announcement, i){
       return (
-        <li><span> {announcement.userName} says : </span> {announcement.text} </li>
+        <li key={i} ><span> {announcement.userName} says : </span> {announcement.text} </li>
         )
     })
     return (

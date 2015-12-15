@@ -34,20 +34,21 @@ function setup(io){
     });
 
     socket.on('saveAnnouncementToDb', function (announcementObject) {
-      console.log('announcement', announcementObject);
+      console.log('save announcement to db', announcementObject);
+
       db.save('announcement', announcementObject)
         .then(function(data){
           console.log('success', data);
-          //get all announcements
-          //emit to client
-          db.fetch('announcement')
-            .then(function(announcements){
-              socket.broadcast.emit('allAnnouncementData',announcements)
-            })
+          return db.fetch('announcement');
+        })
+        .then(function(announcements){
+          console.log('announcemnts', announcements)
+          emitToClient(socket, 'allAnnouncementData', {announcements: announcements})
         })
         .catch(function(err){
           console.log('shit', err)
         })
+        
     });
 
     socket.on('saveLinkToDb', function (linkObject) {
@@ -57,7 +58,7 @@ function setup(io){
           console.log('success', data);
           db.fetch('link')
             .then(function(links){
-              socket.broadcast.emit('allLinkData', links)
+               emitToClient(socket,'allLinkData', {links:links})
             })
         })
         .catch(function(err){

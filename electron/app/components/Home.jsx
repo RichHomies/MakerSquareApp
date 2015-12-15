@@ -2,6 +2,8 @@ const ipcRenderer = require('electron').ipcRenderer;
 const HomeActions = require('../actions/HomeActions')
 const HomeStore = require('../stores/HomeStore')
 const Loader = require('react-loader');
+const List = require('./List');
+const Announcement = require('./Announcement');
 
 class Home extends React.Component {
   constructor(props) {
@@ -17,11 +19,14 @@ class Home extends React.Component {
     connectToSocketOnServer
       .then(function(status){
         if(status === 'connected!') {
-          HomeActions.getLinksAndAnnouncements()
+          HomeActions.getLinksAnnouncements()
+          socket.on('allAnnouncementData', function(announcements){
+            HomeActions.updateAnnouncements(announcements)
+          })
         }
       })
       .catch(function(err){
-        console.log('error')
+        console.log('error', err)
       })
     ipcRenderer.send('asynchronous-message', {type: 'request' ,method: 'GET', resource: 'githubToken'});
     ipcRenderer.on('asynchronous-reply', function(event, arg) {
@@ -51,6 +56,8 @@ class Home extends React.Component {
             <button type="submit">Submit</button>
           </form>
         </Loader>
+        <List links={this.state.links}></List>
+        <Announcement announcements={this.state.announcements}></Announcement>
       </div>
     )
   }

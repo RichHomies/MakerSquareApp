@@ -6,7 +6,6 @@ var gitHub = require('./services/github')
 module.exports = {
   setup: function(app) {
     //api endpoints
-    // app.post('/api/users', db.getUser, gitHub.getUserToken, db.createUser)
     app.post('/api/users', db.getUser, gitHub.getUserToken, db.createUser)
   } 
 }
