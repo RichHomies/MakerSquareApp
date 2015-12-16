@@ -39,6 +39,13 @@ function directToGithub (mainWindow, done){
       done(null)
     }
   })
+  mainWindow.webContents.on('did-get-redirect-request', function(event, oldUrl, newUrl) {
+    if (newUrl.indexOf(callbackUrl) !== -1) {
+      done(newUrl.split('=')[1])
+    } else {
+      done(null)
+    }
+  })
 }
 
 function setTokenInLocalStorage(webcontents, code, done){
@@ -72,7 +79,6 @@ function init (mainWindow) {
   .then(function(done, data){
     console.log('data from git', data);
     if(data){
-
       mainWindow.loadURL(`file://${__dirname}/public/index.html`);
     } else {
       directToGithub(mainWindow, done)
