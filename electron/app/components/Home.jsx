@@ -48,16 +48,35 @@ class Home extends React.Component {
     return (
       <div>
         <Loader loaded={this.state.loaded}>
-          Hello {this.state.name}! Here is your profile picture:
-          <img className="ui avatar image" src={this.state.avatar_url}></img>
-          <span>{this.state.username}</span>
-          <form onSubmit={this.handleSubmit.bind(this)}>
-            <input value={this.state.announcementPost} onChange={HomeActions.updateAnnouncementPost}></input>
-            <button type="submit">Submit</button>
-          </form>
+          <div className="ui left demo vertical visible inverted sidebar labeled icon menu">
+            <a className="item">
+              <img className="ui avatar image" src={this.state.avatar_url}></img>
+              {this.state.username}
+            </a>
+            <a className="item">
+              <i className="block layout icon"></i>
+              Topics
+            </a>
+            <a className="item">
+              <i className="smile icon"></i>
+              Friends
+            </a>
+          </div>
+
+          <div className="pusher">
+            <div className="ui grid">
+            <form onSubmit={this.handleSubmit.bind(this)}>
+              <input value={this.state.announcementPost} onChange={HomeActions.updateAnnouncementPost}></input>
+              <button type="submit">Submit</button>
+            </form>
+            <List links={this.state.links}></List>
+            <Announcement announcements={this.state.announcements}></Announcement>
+            </div>
+
+          </div>
+        
+
         </Loader>
-        <List links={this.state.links}></List>
-        <Announcement announcements={this.state.announcements}></Announcement>
       </div>
     )
   }

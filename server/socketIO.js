@@ -27,28 +27,19 @@ function setup(io){
           }
       )
       .val(function(links, announcements){
-        console.log('fixing to emit');
         emitToClient(socket ,'linksAnnouncements', {announcements: announcements, links: links})
       });
             
     });
 
     socket.on('saveAnnouncementToDb', function (announcementObject) {
-      console.log('save announcement to db', announcementObject);
-
       db.save('announcement', announcementObject)
         .then(function(data){
-          console.log('success', data);
           return db.fetch('announcement');
         })
         .then(function(announcements){
-          console.log('announcemnts', announcements)
           emitToClient(socket, 'allAnnouncementData', {announcements: announcements})
-        })
-        .catch(function(err){
-          console.log('shit', err)
-        })
-        
+        })        
     });
 
     socket.on('saveLinkToDb', function (linkObject) {

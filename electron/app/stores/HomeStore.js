@@ -38,6 +38,7 @@ class HomeStore {
   onUpdateAnnouncements(announcements) {
     console.log('announcements', announcements)
     this.announcements = announcements.announcements
+    this.announcementPost = ''
   }
 
 }
