@@ -1,4 +1,3 @@
-const ipcRenderer = require('electron').ipcRenderer;
 const LinkHomeActions = require('../actions/LinkHomeActions')
 const LinkHomeStore = require('../stores/LinkHomeStore')
 const Loader = require('react-loader');
@@ -6,7 +5,9 @@ const alt = require('../alt')
 const moment = require('moment')
 const shell = require('electron').shell;
 const toastr = require('toastr')
+const ipcRenderer = require('electron').ipcRenderer;
 
+var firstTimeRendering = true
 
 class LinkHome extends React.Component {
   constructor(props) {
@@ -23,7 +24,9 @@ class LinkHome extends React.Component {
       .then(function(status){
         if(status === 'connected!') {
           socket.on('allLinkData', function(links) {
+            ipcRenderer.send('notification-inc', {type: 'link', initialCall: firstTimeRendering})
             LinkHomeActions.updateLinks(links)
+            firstTimeRendering = false
           })
           LinkHomeActions.getLinks() //gets initial links
         }
@@ -32,6 +35,7 @@ class LinkHome extends React.Component {
         console.log('error', err)
       })
   }
+
   componentWillUnmount () {
     LinkHomeStore.unlisten(this.onChange)
   }
@@ -39,16 +43,17 @@ class LinkHome extends React.Component {
     event.preventDefault();
     var linkText = this.state.linkText.trim();
     var linkUrl = this.state.linkUrl.trim();
+    var linkSubj = this.state.linkSubj.trim();
     var httpflag = linkUrl.indexOf('http://') !== 0
     var httpsflag = linkUrl.indexOf('https://') !== 0
     console.log('index of', linkUrl.indexOf('http://') !== 0)
     console.log('link url', linkUrl)
-    if (!httpflag) { //if http not in there
-      LinkHomeActions.postLink(linkText, linkUrl)
+    if (!httpflag && (linkText && linkUrl && linkSubj)) { //if http not in there
+      LinkHomeActions.postLink(linkText, linkUrl, linkSubj)
       return null
     }
-    if (!httpsflag) {
-      LinkHomeActions.postLink(linkText, linkUrl)
+    if (!httpsflag && (linkText && linkUrl && linkSubj)) {
+      LinkHomeActions.postLink(linkText, linkUrl, linkSubj)
       return null
     }
     toastr.error('You need to add http:// to the url, Alex.')
@@ -76,6 +81,10 @@ class LinkHome extends React.Component {
             <div className="field">
               <label>Link Url</label>
               <input type="url" value={this.state.linkUrl} placeholder="Link Url" onChange={LinkHomeActions.updateLinkUrl} />
+            </div>
+            <div className="field">
+              <label>Link Subject</label>
+              <input type="text" value={this.state.linkSubj} placeholder="Link Text" onChange={LinkHomeActions.updateLinkSubj} />
             </div>
             <button className="ui submit button" onClick={this.handleLinkSubmit.bind(this)}>Submit Link</button>
           </form>

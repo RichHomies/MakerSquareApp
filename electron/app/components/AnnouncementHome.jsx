@@ -1,9 +1,11 @@
-const ipcRenderer = require('electron').ipcRenderer;
 const AnnouncementHomeActions = require('../actions/AnnouncementHomeActions')
 const AnnouncementHomeStore = require('../stores/AnnouncementHomeStore')
 const Loader = require('react-loader');
 const alt = require('../alt')
 const moment = require('moment')
+const ipcRenderer = require('electron').ipcRenderer;
+
+var firstTimeRendering = true
 
 class AnnouncementHome extends React.Component {
   constructor(props) {
@@ -20,8 +22,9 @@ class AnnouncementHome extends React.Component {
       .then(function(status){
         if(status === 'connected!') {
           socket.on('allAnnouncementData', function(announcements) {
-            console.log('updating announcements', announcements)
+            ipcRenderer.send('notification-inc', {type: 'announcement', initialCall: firstTimeRendering})
             AnnouncementHomeActions.updateAnnouncements(announcements)
+            firstTimeRendering = false
           })
           AnnouncementHomeActions.getAnnouncements() //gets initial announcements
         }
@@ -29,6 +32,7 @@ class AnnouncementHome extends React.Component {
       .catch(function(err){
         console.log('error', err)
       })
+
   }
   componentWillUnmount () {
     AnnouncementHomeStore.unlisten(this.onChange)
