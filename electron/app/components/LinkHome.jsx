@@ -39,16 +39,17 @@ class LinkHome extends React.Component {
     event.preventDefault();
     var linkText = this.state.linkText.trim();
     var linkUrl = this.state.linkUrl.trim();
+    var linkSubj = this.state.linkSubj.trim();
     var httpflag = linkUrl.indexOf('http://') !== 0
     var httpsflag = linkUrl.indexOf('https://') !== 0
     console.log('index of', linkUrl.indexOf('http://') !== 0)
     console.log('link url', linkUrl)
-    if (!httpflag) { //if http not in there
-      LinkHomeActions.postLink(linkText, linkUrl)
+    if (!httpflag && (linkText && linkUrl && linkSubj)) { //if http not in there
+      LinkHomeActions.postLink(linkText, linkUrl, linkSubj)
       return null
     }
-    if (!httpsflag) {
-      LinkHomeActions.postLink(linkText, linkUrl)
+    if (!httpsflag && (linkText && linkUrl && linkSubj)) {
+      LinkHomeActions.postLink(linkText, linkUrl, linkSubj)
       return null
     }
     toastr.error('You need to add http:// to the url, Alex.')
@@ -76,6 +77,10 @@ class LinkHome extends React.Component {
             <div className="field">
               <label>Link Url</label>
               <input type="url" value={this.state.linkUrl} placeholder="Link Url" onChange={LinkHomeActions.updateLinkUrl} />
+            </div>
+            <div className="field">
+              <label>Link Subject</label>
+              <input type="text" value={this.state.linkSubj} placeholder="Link Text" onChange={LinkHomeActions.updateLinkSubj} />
             </div>
             <button className="ui submit button" onClick={this.handleLinkSubmit.bind(this)}>Submit Link</button>
           </form>
