@@ -1,0 +1,10 @@
+.link {
+  pointer: cursor;
+}
+
+.link:hover {
+  pointer: cursor;
+
+  text-decoration: underline;
+  color: blue;
+}
