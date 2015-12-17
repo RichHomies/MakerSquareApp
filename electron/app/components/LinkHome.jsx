@@ -90,7 +90,7 @@ class LinkHome extends React.Component {
             <div className="summary">
               <div className="user">
                 {alt.stores.HomeStore.state.name}
-              </div> posted a link: <div onClick={that.openLink.bind(this, link.url)}>{link.text}</div>
+              </div> posted a link: <div className="link" onClick={that.openLink.bind(this, link.url)}>{link.text}</div>
               <div className="date">
                 {moment.utc(link.creationDate).format('MMM Do h:mmA')}
               </div>
