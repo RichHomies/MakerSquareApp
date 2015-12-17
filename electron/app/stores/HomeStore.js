@@ -6,7 +6,6 @@ class HomeStore {
     this.bindActions(HomeActions);
     this.loaded = false;
     this.announcements = [];
-    this.links = [];
     this.username = ''
     this.avatar_url = ''
     this.name = ''
@@ -24,22 +23,14 @@ class HomeStore {
   onGetUserDataFail(errorMessage) {
     console.log('fail', errorMessage)
   }
-  onGetLinksAnnouncementsSuccess(data) {
-    console.log('get links announcements success', data)
-    this.links = data.links
-    this.announcements = data.announcements
-  }
-  onGetLinksAnnouncementsFail() {
-    console.log('UH OH')
-  }
   onUpdateAnnouncementPost(event) {
     this.announcementPost = event.target.value
   }
   onUpdateAnnouncements(announcements) {
-    console.log('announcements', announcements)
     this.announcements = announcements.announcements
     this.announcementPost = ''
   }
+  
 
 }
 

@@ -3,10 +3,8 @@ var mongoose = require('mongoose');
 var linksSchema = new mongoose.Schema({
     userName : String,
     userId : String,
-    body : {
-      text: {type: String, default: ''},
-      url : {type: String , default: ''}
-    },
+    text: {type: String, default: ''},
+    url : {type: String , default: ''},
     creationDate :  {type: Date, default: Date.now()}
 });
 
