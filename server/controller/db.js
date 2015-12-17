@@ -9,17 +9,20 @@ var model = {
 }
 
 function saveToDb (model, dataObj){
-  console.log('savetodb')
   var item = new model(dataObj);
   return item.save()
 }
 
+function deleteFromDb(model, idObj) {
+  console.log('deleteFromDb', idObj)
+  var item = model.find({_id: idObj.id})
+  return item.remove().exec()
+}
 
 function getUser (req, res, next){
   var code = req.body.code
   User.findOne({code: code}).exec()
     .then(function(user){
-      console.log('this is the user', user)
       if(user){
         res.status(200).json({user: user})
       } else {
@@ -42,8 +45,6 @@ function createUser (req, res){
     },
     code : req.body.code
   }
-  console.log('userGithubProfile', userGithubProfile)
-
   saveToDb(User, userGithubProfile)
     .then(function(user){
       user.tokens.github = null
@@ -52,8 +53,11 @@ function createUser (req, res){
 }
 
 function save(type, data) {
-  console.log('saving')
   return saveToDb(model[type], data)
+}
+
+function deleteItem (type, idObj) {
+  return deleteFromDb(model[type], idObj)
 }
 
 function fetch(type){
@@ -65,5 +69,6 @@ module.exports = {
   getUser : getUser,
   createUser : createUser,
   save : save,
-  fetch : fetch
+  fetch : fetch,
+  deleteItem: deleteItem
 }

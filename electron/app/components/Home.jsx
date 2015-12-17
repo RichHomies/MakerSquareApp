@@ -2,8 +2,8 @@ const ipcRenderer = require('electron').ipcRenderer;
 const HomeActions = require('../actions/HomeActions')
 const HomeStore = require('../stores/HomeStore')
 const Loader = require('react-loader');
-const List = require('./List');
-const Announcement = require('./Announcement');
+const LinkHome = require('./LinkHome')
+const AnnouncementHome = require('./AnnouncementHome')
 
 class Home extends React.Component {
   constructor(props) {
@@ -16,18 +16,6 @@ class Home extends React.Component {
   }
   componentDidMount() {
     HomeStore.listen(this.onChange);
-    connectToSocketOnServer
-      .then(function(status){
-        if(status === 'connected!') {
-          HomeActions.getLinksAnnouncements()
-          socket.on('allAnnouncementData', function(announcements){
-            HomeActions.updateAnnouncements(announcements)
-          })
-        }
-      })
-      .catch(function(err){
-        console.log('error', err)
-      })
     ipcRenderer.send('asynchronous-message', {type: 'request' ,method: 'GET', resource: 'githubToken'});
     ipcRenderer.on('asynchronous-reply', function(event, arg) {
       console.log('render process replied', arg)
@@ -37,18 +25,18 @@ class Home extends React.Component {
   componentWillUnmount() {
     HomeStore.unlisten(this.onChange);
   }
-  handleSubmit(event) {
-    event.preventDefault();
-    var announcementPost = this.state.announcementPost.trim();
-    if (announcementPost) {
-      HomeActions.postAnnouncement(announcementPost)
-    }
-  }
+  
   render() {
+    var announcements = this.state.announcements.map(function(announcement, i){
+      return (
+        <li key={i} ><span> {announcement.userName} says : </span> {announcement.text} </li>
+        )
+    })
+    
     return (
       <div>
         <Loader loaded={this.state.loaded}>
-          <div className="ui left demo vertical visible inverted sidebar labeled icon menu">
+          <div className="ui left demo attached vertical visible inverted sidebar labeled icon menu">
             <a className="item">
               <img className="ui avatar image" src={this.state.avatar_url}></img>
               {this.state.username}
@@ -65,12 +53,8 @@ class Home extends React.Component {
 
           <div className="pusher">
             <div className="ui grid">
-            <form onSubmit={this.handleSubmit.bind(this)}>
-              <input value={this.state.announcementPost} onChange={HomeActions.updateAnnouncementPost}></input>
-              <button type="submit">Submit</button>
-            </form>
-            <List links={this.state.links}></List>
-            <Announcement announcements={this.state.announcements}></Announcement>
+              <LinkHome />
+              <AnnouncementHome />
             </div>
 
           </div>

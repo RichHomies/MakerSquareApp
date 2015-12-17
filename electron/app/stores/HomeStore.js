@@ -6,11 +6,10 @@ class HomeStore {
     this.bindActions(HomeActions);
     this.loaded = false;
     this.announcements = [];
-    this.links = [];
     this.username = ''
     this.avatar_url = ''
     this.name = ''
-    this.roles = ''
+    this.studentOrAdmin = ''
     this.announcementPost = ''
   }
   onGetUserDataSuccess(data) {
@@ -18,28 +17,21 @@ class HomeStore {
     this.username = data.user.username
     this.name = data.user.name
     this.avatar_url = data.user.avatar_url
+    this.studentOrAdmin = data.user.role.studentOrAdminRights
     this.loaded = true;
     this._id =  data.user._id
   }
   onGetUserDataFail(errorMessage) {
     console.log('fail', errorMessage)
   }
-  onGetLinksAnnouncementsSuccess(data) {
-    console.log('get links announcements success', data)
-    this.links = data.links
-    this.announcements = data.announcements
-  }
-  onGetLinksAnnouncementsFail() {
-    console.log('UH OH')
-  }
   onUpdateAnnouncementPost(event) {
     this.announcementPost = event.target.value
   }
   onUpdateAnnouncements(announcements) {
-    console.log('announcements', announcements)
     this.announcements = announcements.announcements
     this.announcementPost = ''
   }
+  
 
 }
 
