@@ -9,7 +9,6 @@ class HomeActions {
       )
   }
   getUserData(code) {
-    console.log('in actions')
     $.ajax({
       type:'POST',
       url:'http://localhost:8080/api/users',

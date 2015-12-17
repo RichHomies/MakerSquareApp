@@ -4,8 +4,8 @@ const LinkHomeStore = require('../stores/LinkHomeStore')
 const Loader = require('react-loader');
 const alt = require('../alt')
 const moment = require('moment')
-
-
+const shell = require('electron').shell;
+const toastr = require('toastr')
 
 
 class LinkHome extends React.Component {
@@ -18,14 +18,11 @@ class LinkHome extends React.Component {
     this.setState(state)
   }
   componentDidMount() {
-    console.log('mounted')
     LinkHomeStore.listen(this.onChange)
     connectToSocketOnServer
       .then(function(status){
-        console.log('connected in linkHome', status)
         if(status === 'connected!') {
           socket.on('allLinkData', function(links) {
-            console.log('updating links', links)
             LinkHomeActions.updateLinks(links)
           })
           LinkHomeActions.getLinks() //gets initial links
@@ -39,20 +36,50 @@ class LinkHome extends React.Component {
     LinkHomeStore.unlisten(this.onChange)
   }
   handleLinkSubmit(event) {
-    console.log('fired')
     event.preventDefault();
     var linkText = this.state.linkText.trim();
     var linkUrl = this.state.linkUrl.trim();
-    if (linkText && linkUrl) {
+    var httpflag = linkUrl.indexOf('http://') !== 0
+    var httpsflag = linkUrl.indexOf('https://') !== 0
+    console.log('index of', linkUrl.indexOf('http://') !== 0)
+    console.log('link url', linkUrl)
+    if (!httpflag) { //if http not in there
       LinkHomeActions.postLink(linkText, linkUrl)
+      return null
     }
+    if (!httpsflag) {
+      LinkHomeActions.postLink(linkText, linkUrl)
+      return null
+    }
+    toastr.error('You need to add http:// to the url, Alex.')
+    setTimeout(function() {
+      toastr.error('...and Clippers suck.')
+    }, 1500)
   }
   removeLink(link_id) {
-    console.log('link_id', link_id)
     LinkHomeActions.removeLink(link_id)
   }
+  openLink(linkurl) {
+    console.log('linkurl', linkurl)
+    shell.openExternal(linkurl)
+  }
+
   render() {
     var that = this
+    var adminPost = null
+    if (alt.stores.HomeStore.state.studentOrAdmin === "student") {
+      adminPost = <form className="ui form" >
+            <div className="field">
+              <label>Link Text</label>
+              <input type="text" value={this.state.linkText} placeholder="Link Text" onChange={LinkHomeActions.updateLinkText} />
+            </div>
+            <div className="field">
+              <label>Link Url</label>
+              <input type="url" value={this.state.linkUrl} placeholder="Link Url" onChange={LinkHomeActions.updateLinkUrl} />
+            </div>
+            <button className="ui submit button" onClick={this.handleLinkSubmit.bind(this)}>Submit Link</button>
+          </form>
+    }
     var links = this.state.links.map(function(link, i){
       return (
         <div key={i} className='event'>
@@ -61,9 +88,9 @@ class LinkHome extends React.Component {
           </div>
           <div className="content">
             <div className="summary">
-              <a className="user">
+              <div className="user">
                 {alt.stores.HomeStore.state.name}
-              </a> posted a link: <a href={link.url}>{link.text}</a>
+              </div> posted a link: <div onClick={that.openLink.bind(this, link.url)}>{link.text}</div>
               <div className="date">
                 {moment.utc(link.creationDate).format('MMM Do h:mmA')}
               </div>
@@ -78,18 +105,7 @@ class LinkHome extends React.Component {
     return (
       <div className="six wide column">
         <Loader loaded={this.state.linkLoaded}>
-          <form className="ui form" >
-            <div className="field">
-              <label>Link Text</label>
-              <input type="text" value={this.state.linkText} placeholder="Link Text" onChange={LinkHomeActions.updateLinkText} />
-            </div>
-            <div className="field">
-              <label>Link Url</label>
-              <input type="url" value={this.state.linkUrl} placeholder="Link Url" onChange={LinkHomeActions.updateLinkUrl} />
-            </div>
-            <button className="ui submit button" onClick={this.handleLinkSubmit.bind(this)}>Submit Link</button>
-          </form>
-
+          {adminPost}
           <div className="ui feed">{links}</div>
         </Loader>
       </div>

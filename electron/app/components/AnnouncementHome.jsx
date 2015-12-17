@@ -18,7 +18,6 @@ class AnnouncementHome extends React.Component {
     AnnouncementHomeStore.listen(this.onChange)
     connectToSocketOnServer
       .then(function(status){
-        console.log('connected in AnnouncementHome', status)
         if(status === 'connected!') {
           socket.on('allAnnouncementData', function(announcements) {
             console.log('updating announcements', announcements)

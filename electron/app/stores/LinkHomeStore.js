@@ -16,7 +16,6 @@ class LinkHomeStore {
     this.linkUrl = event.target.value
   }
   onUpdateLinks(links) {
-    console.log('links in onUpdateLinks', links)
     this.links = links.links.reverse()
     this.linkText = ''
     this.linkUrl = ''

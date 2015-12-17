@@ -12,7 +12,6 @@ class AnnouncementHomeStore {
     this.announcementText = event.target.value
   }
   onUpdateAnnouncements(announcements) {
-    console.log('Announcements in onUpdateAnnouncements', announcements)
     this.announcements = announcements.announcements.reverse()
     this.announcementText = ''
     this.announcementLoaded = true
