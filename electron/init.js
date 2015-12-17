@@ -5,7 +5,8 @@ const options = {
 };
 const githubUrl = 'https://github.com/login/oauth/authorize?'
 const authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scopes
-const callbackUrl = 'http://localhost:8080/auth/callback?'
+// const callbackUrl = 'http://localhost:8080/auth/callback?'
+const callbackUrl = 'http://54.201.227.250/auth/callback?'
 
 function getGithubTokenFromLocalStorage(webcontents, done){
   var options = {

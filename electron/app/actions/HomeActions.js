@@ -11,7 +11,7 @@ class HomeActions {
   getUserData(code) {
     $.ajax({
       type:'POST',
-      url:'http://localhost:8080/api/users',
+      url:'http://54.201.227.250/api/users',
       data: { code: code }
     })
     .done((data) => {

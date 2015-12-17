@@ -16,13 +16,13 @@
     <div id="content"></div>
   </body>
   <script>var jQuery = require("jquery")</script>
-  <script src='http://localhost:8080/socket.io/socket.io.js'></script>
+  <script src='http://54.201.227.250/socket.io/socket.io.js'></script>
   <script src="../semantic/dist/semantic.min.js"></script>
   <script>
     require('babel/register');
     var React = require('react');
     var Promise = require("bluebird")
-    var socket = io.connect('http://localhost:8080')
+    var socket = io.connect('http://54.201.227.250')
     var connectToSocketOnServer = new Promise(function(resolve, reject){
       socket.on('connect',function(){
         console.log('connected!')
