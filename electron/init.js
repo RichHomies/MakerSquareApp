@@ -1,6 +1,6 @@
 const ASQ = require('asynquence')
 const options = {
-  client_id: 'f110822db744ebfc266c',
+  client_id: '42ac71972dc1c3d5b947',
   scopes: ["user:email", "notifications"] // Scopes limit access for OAuth tokens.
 };
 const githubUrl = 'https://github.com/login/oauth/authorize?'
