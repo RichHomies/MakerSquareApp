@@ -28,13 +28,15 @@ function getToken (code, done) {
     client_secret: config.github.secret,
     code: code
   })
+  console.log('qs to get token', qs)
   request.post('https://github.com/login/oauth/access_token?'+qs, function(error, response, body){
     console.log('this is body', body)
     if(error) {
-      console.log(error)
+      console.log('error from github', error)
       done.fail(response.statusCode, error)
     } else {
       var parsedBody = querystring.parse(body)
+      console.log('parsed Body from github', parsedBody);
       done(response.statusCode, parsedBody.access_token)
     }
   })
