@@ -6,6 +6,7 @@ var linksSchema = new mongoose.Schema({
     subject: String,
     text: {type: String, default: ''},
     url : {type: String , default: ''},
+    avatar_url : String,
     creationDate :  {type: Date, default: Date.now()}
 });
 

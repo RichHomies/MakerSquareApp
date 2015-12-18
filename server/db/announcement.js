@@ -4,6 +4,7 @@ var announcementSchema = new mongoose.Schema({
     userName : String,
     userId : {type: String, default: ''},
     text: {type: String, default: ''},
+    avatar_url : String,
     creationDate :  {type: Date, default: Date.now()}
 });
 
