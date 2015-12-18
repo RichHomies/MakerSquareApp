@@ -39,7 +39,7 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   // Create the Browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600});
-  clearLocalStorage(mainWindow.webContents)
+  // clearLocalStorage(mainWindow.webContents)
   ipcChannel.initializeChannel(ipcMain, mainWindow.webContents)
   ipcMain.on('notification-inc', function(event, arg) {
     console.log('recieved notification-inc arg', arg)

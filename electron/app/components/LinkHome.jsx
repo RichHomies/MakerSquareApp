@@ -5,7 +5,7 @@ const alt = require('../alt')
 const moment = require('moment')
 const shell = require('electron').shell;
 const toastr = require('toastr')
-const ipcRenderer = require('electron').ipcRenderer;
+
 
 var firstTimeRendering = true
 
@@ -24,7 +24,6 @@ class LinkHome extends React.Component {
       .then(function(status){
         if(status === 'connected!') {
           socket.on('allLinkData', function(links) {
-            ipcRenderer.send('notification-inc', {type: 'link', initialCall: firstTimeRendering})
             LinkHomeActions.updateLinks(links)
             firstTimeRendering = false
           })

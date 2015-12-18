@@ -22,7 +22,6 @@ class AnnouncementHome extends React.Component {
       .then(function(status){
         if(status === 'connected!') {
           socket.on('allAnnouncementData', function(announcements) {
-            ipcRenderer.send('notification-inc', {type: 'announcement', initialCall: firstTimeRendering})
             AnnouncementHomeActions.updateAnnouncements(announcements)
             firstTimeRendering = false
           })
