@@ -7,6 +7,14 @@ const ipcMain = electron.ipcMain;
 const init = require('./init');
 const ipcChannel = require('./ipcChannel');
 
+function clearLocalStorage(webContents){
+  webContents.session.cookies.remove({
+    name: 'github',
+    url : 'http://www.github.com'
+  }, function(err){
+    console.log('erradsdss', err);
+  })
+}
 
 // Report crashes to our server.
 electron.crashReporter.start();
@@ -29,9 +37,9 @@ app.on('window-all-closed', function() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
-
   // Create the Browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600});
+  clearLocalStorage(mainWindow.webContents)
   ipcChannel.initializeChannel(ipcMain, mainWindow.webContents)
   ipcMain.on('notification-inc', function(event, arg) {
     console.log('recieved notification-inc arg', arg)

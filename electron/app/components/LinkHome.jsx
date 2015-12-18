@@ -93,12 +93,12 @@ class LinkHome extends React.Component {
       return (
         <div key={i} className='event'>
           <div className="label">
-            <img src={alt.stores.HomeStore.state.avatar_url} />
+            <img src={link.avatar_url} />
           </div>
           <div className="content">
             <div className="summary">
               <div className="user">
-                {alt.stores.HomeStore.state.name}
+                {link.name}
               </div> posted a link: <div className="link" onClick={that.openLink.bind(this, link.url)}>{link.text}</div>
               <div className="date">
                 {moment.utc(link.creationDate).format('MMM Do h:mmA')}

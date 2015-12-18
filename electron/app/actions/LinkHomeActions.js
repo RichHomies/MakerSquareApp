@@ -1,12 +1,13 @@
 import alt from '../alt';
 
-function formatLinkObject(text, url, subj, username, _id){
+function formatLinkObject(text, url, subj, username, _id, avatar_url){
   return {
     text : text,
     url: url,
     subject: subj,
     userName : username,
-    userId : _id
+    userId : _id,
+    avatar_url : avatar_url
   }
 }
 
@@ -20,7 +21,7 @@ class LinkHomeActions {
       )
   }
   postLink(text, url, subj) {    
-    var linkObject = formatLinkObject(text, url, subj, alt.stores.HomeStore.state.name, alt.stores.HomeStore.state._id)
+    var linkObject = formatLinkObject(text, url, subj, alt.stores.HomeStore.state.name, alt.stores.HomeStore.state._id, alt.stores.HomeStore.state.avatar_url)
     socket.emit('saveLinkToDb', linkObject)
   }
   getLinks() {

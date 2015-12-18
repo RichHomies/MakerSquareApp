@@ -53,12 +53,12 @@ class AnnouncementHome extends React.Component {
       return (
         <div key={i} className='event'>
           <div className="label">
-            <img src={alt.stores.HomeStore.state.avatar_url} />
+            <img src={announcement.avatar_url} />
           </div>
           <div className="content">
             <div className="summary">
               <div className="user">
-                {alt.stores.HomeStore.state.name}
+                {announcement.userName}
               </div> posted a announcement: {announcement.text}
               <div className="date">
                 {moment.utc(announcement.creationDate).format('MMM Do h:mmA')}
