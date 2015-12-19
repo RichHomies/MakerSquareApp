@@ -38,9 +38,11 @@ app.on('window-all-closed', function() {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   // Create the Browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
-  // clearLocalStorage(mainWindow.webContents)
+  mainWindow = new BrowserWindow({width: 1000, height: 600});
+  clearLocalStorage(mainWindow.webContents)
+
   ipcChannel.initializeChannel(ipcMain, mainWindow.webContents)
+
   ipcMain.on('notification-inc', function(event, arg) {
     console.log('recieved notification-inc arg', arg)
     if (!arg.initialCall) {
@@ -51,6 +53,7 @@ app.on('ready', function() {
       app.dock.setBadge(notificationCount.toString())
     }
   })
+
   mainWindow.webContents.on('did-stop-loading', function(event, url) {
     var urlArray = mainWindow.webContents.getURL().split('electron/public/')
     var currentWindowLocation = urlArray[urlArray.length - 1]
@@ -60,12 +63,11 @@ app.on('ready', function() {
       console.log('dam son')
     }
   })
+  
   mainWindow.loadURL(`file://${__dirname}/public/landing.html`);
 
-
-
-  // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
   var focused = true
 
   mainWindow.on('focus', function() {

@@ -7,31 +7,30 @@ const githubUrl = 'https://github.com/login/oauth/authorize?'
 const authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scopes
 // const callbackUrl = 'http://localhost:8080/auth/callback?'
 const callbackUrl = 'http://54.201.227.250/auth/callback?'
-
+const i = 0;
 function getGithubTokenFromLocalStorage(webcontents, done){
   var options = {
     name: 'github',
     url : 'http://www.github.com'
   }
   webcontents.session.cookies.get(options, function(err, cookies){
-    if(err || cookies.length === 0){
+    var githubCode = cookies.reduce(function(prevVal, currentVal) {
+      if (!prevVal && currentVal.name === 'github') {
+        return currentVal.value
+      } else {
+        return prevVal
+      }
+    }, null)
+    console.log('github code',githubCode)
+    if(err || !githubCode || githubCode === ''){
       done(null, err)
     } else {
-      var githubCode = cookies.reduce(function(prevVal, currentVal) {
-        if (!prevVal && currentVal.name === 'github') {
-          return currentVal.value
-        } else {
-          return prevVal
-        }
-      }, null)
       done(githubCode)
     }
   })
 }
 
 function directToGithub (mainWindow, done){
-  mainWindow.loadURL(authUrl);
-  mainWindow.show();
   mainWindow.webContents.on('will-navigate', function (event, url) {
     console.log('url', url)
     if (url.indexOf(callbackUrl) !== -1) {
@@ -41,12 +40,17 @@ function directToGithub (mainWindow, done){
     }
   })
   mainWindow.webContents.on('did-get-redirect-request', function(event, oldUrl, newUrl) {
+    console.log('did redirect new', newUrl)
+    console.log('did redirect old', oldUrl)
     if (newUrl.indexOf(callbackUrl) !== -1) {
       done(newUrl.split('=')[1])
     } else {
       done(null)
     }
   })
+  console.log('direct to github')
+  mainWindow.loadURL(authUrl);
+  mainWindow.show();
 }
 
 function setTokenInLocalStorage(webcontents, code, done){
@@ -74,6 +78,7 @@ function clearLocalStorage(webContents){
 }
 
 function init (mainWindow) {
+  console.log('init', i++)
   ASQ(function(done){
     getGithubTokenFromLocalStorage(mainWindow.webContents, done)
   })
