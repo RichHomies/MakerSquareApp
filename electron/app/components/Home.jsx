@@ -19,7 +19,7 @@ class Home extends React.Component {
     ipcRenderer.send('asynchronous-message', {type: 'request' ,method: 'GET', resource: 'githubToken'});
     ipcRenderer.on('asynchronous-reply', function(event, arg) {
       console.log('render process replied', arg)
-      HomeActions.getUserData(arg.body)
+      HomeActions.getUserData(arg.code)
     });
   }
   componentWillUnmount() {

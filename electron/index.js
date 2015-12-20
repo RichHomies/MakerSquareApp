@@ -39,10 +39,7 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   // Create the Browser window.
   mainWindow = new BrowserWindow({width: 1000, height: 600});
-  clearLocalStorage(mainWindow.webContents)
-
-  ipcChannel.initializeChannel(ipcMain, mainWindow.webContents)
-
+  var ipcChannelPromise = ipcChannel.initializeChannel(ipcMain, mainWindow.webContents)
   ipcMain.on('notification-inc', function(event, arg) {
     console.log('recieved notification-inc arg', arg)
     if (!arg.initialCall) {
@@ -57,13 +54,25 @@ app.on('ready', function() {
   mainWindow.webContents.on('did-stop-loading', function(event, url) {
     var urlArray = mainWindow.webContents.getURL().split('electron/public/')
     var currentWindowLocation = urlArray[urlArray.length - 1]
+    console.log('url ', url)
     if (currentWindowLocation.indexOf('landing.html') !== -1) {
       init.init(mainWindow)
+      .then(function(code){
+        console.log('back in indexjs with the code - fixing to load index', code)
+        mainWindow.loadURL(`file://${__dirname}/public/index.html`);
+        ipcChannelPromise
+        .then(function(eventArgsObjs){
+          eventArgsObjs.arg['code'] = code.code
+          console.log('sending code to webpage')
+          eventArgsObjs.event.sender.send('asynchronous-reply', eventArgsObjs.arg)
+        })
+      })
+
     } else {
       console.log('dam son')
     }
   })
-  
+
   mainWindow.loadURL(`file://${__dirname}/public/landing.html`);
 
   mainWindow.webContents.openDevTools();

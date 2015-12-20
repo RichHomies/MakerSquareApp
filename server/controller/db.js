@@ -20,6 +20,7 @@ function deleteFromDb(model, idObj) {
 }
 
 function getUser (req, res, next){
+  console.log('req body', req.body)
   var code = req.body.code
   User.findOne({code: code}).exec()
     .then(function(user){

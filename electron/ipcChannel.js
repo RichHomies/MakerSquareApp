@@ -1,26 +1,25 @@
 const init = require('./init')
 const ASQ = require('asynquence')
-
+const Promise = require("bluebird")
 function initializeChannel(ipcMain, webContents){
-  ipcMain.on('asynchronous-message', function(event, arg) {
-    console.log('recieved message', arg)
-    if(arg.method === 'GET' && arg.resource === 'githubToken'){
-      ASQ(function(done){
-        init.getGithubTokenFromLocalStorage(webContents, done)
-      })
-      .then(function(done, code){
-        arg['body'] = code
+  console.log('initializing channel, setting promise')
+  const ipcChannelPromiseRequestForGitHubCode = new Promise(function(resolve, reject){
+    ipcMain.on('asynchronous-message', function(event, arg) {
+      if(arg.method === 'GET' && arg.resource === 'githubToken'){
         arg['type'] = 'response'
-        event.sender.send('asynchronous-reply', arg)
-      })
-      .or(function(err){
-        event.sender.send('asynchronous-reply', 'shit')
-      })
-    }
+        console.log('resolving eventArgs')
+        resolve({event: event, arg: arg})
+      }
+    });
   });
+  return ipcChannelPromiseRequestForGitHubCode;
 }
 
+function ipcPromise (event, arg){
+  event.sender.send('asynchronous-reply', 'shit')
+  event.sender.send('asynchronous-reply', arg)
 
+}
 
 module.exports = {
   initializeChannel: initializeChannel
