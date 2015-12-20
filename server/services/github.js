@@ -9,17 +9,21 @@ function getUserToken (req, res, next) {
   ASQ(function(done) {
     getToken(req.body.code, done)
   })
-    .then(function(done, statusCode, access_token) {
-      res['github'] = access_token
-      getUserProfileFromGithub(access_token, done)
-    })
-    .then(function(done, userObj) {
-      console.log(userObj)
-      res.name = userObj.name
-      res.avatar_url = userObj.avatar_url
-      res.loginName = userObj.loginName
-      next()
-    })
+  .then(function(done, statusCode, access_token) {
+    res['github'] = access_token
+    getUserProfileFromGithub(access_token, done)
+  })
+  .then(function(done, userObj) {
+    console.log(userObj)
+    res.name = userObj.name
+    res.avatar_url = userObj.avatar_url
+    res.loginName = userObj.loginName
+    next()
+  })
+  .or(function(err){
+    var authUrl = 'https://github.com/login/oauth/authorize?client_id=' + config.github.client_id + '&scope=' + config.github.scopes   
+    res.redirect(authUrl)
+  })
 }
 
 function getToken (code, done) {

@@ -41,14 +41,6 @@ class Home extends React.Component {
               <img className="ui avatar image" src={this.state.avatar_url}></img>
               {this.state.username}
             </a>
-            <a className="item">
-              <i className="block layout icon"></i>
-              Topics
-            </a>
-            <a className="item">
-              <i className="smile icon"></i>
-              Friends
-            </a>
           </div>
 
           <div className="pusher">

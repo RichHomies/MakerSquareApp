@@ -11,9 +11,7 @@ const i = 0;
 
 //////////////////////////////////////////////////////////
 //Code GraveYard - Start
-
 // const callbackUrl = 'http://localhost:8080/auth/callback?'
-
 // function getGithubTokenFromLocalStorage(webcontents, done){
 //   var options = {
 //     name: 'github',
