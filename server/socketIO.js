@@ -3,6 +3,7 @@ var db = require('./controller/db')
 
 function emitToClient(socket, type, data){
   socket.emit(type, data);
+  socket.broadcast.emit(type, data);
 }
 
 
