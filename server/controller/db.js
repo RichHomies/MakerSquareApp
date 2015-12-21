@@ -20,13 +20,13 @@ function deleteFromDb(model, idObj) {
 }
 
 function getUser (req, res, next){
-  console.log('req body', req.body)
-  var code = req.body.code
-  User.findOne({code: code}).exec()
+  User.findOne({githubId: res.githubId}).exec()
     .then(function(user){
       if(user){
+        console.log('found user');
         res.status(200).json({user: user})
       } else {
+        console.log('didnt find user');
         next();
       }
     })
@@ -41,11 +41,9 @@ function createUser (req, res){
     role : {
       studentOrAdminRights : isAlexJeng,
     },
-    tokens : {
-      github : res.github
-    },
-    code : req.body.code
+    githubId : req.githubId
   }
+  console.log('github profile saving to db',  userGithubProfile)
   saveToDb(User, userGithubProfile)
     .then(function(user){
       user.tokens.github = null

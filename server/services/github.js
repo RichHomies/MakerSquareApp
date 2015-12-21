@@ -18,11 +18,8 @@ function getUserToken (req, res, next) {
     res.name = userObj.name
     res.avatar_url = userObj.avatar_url
     res.loginName = userObj.loginName
+    res.githubId = userObj.githubId
     next()
-  })
-  .or(function(err){
-    var authUrl = 'https://github.com/login/oauth/authorize?client_id=' + config.github.client_id + '&scope=' + config.github.scopes   
-    res.redirect(authUrl)
   })
 }
 
@@ -68,7 +65,8 @@ function getUserProfileFromGithub (token, done) {
       var userObj = {
         name : body.name,
         avatar_url : body.avatar_url,
-        loginName : body.login
+        loginName : body.login,
+        githubId: body.id
       }
       done(userObj)
     }

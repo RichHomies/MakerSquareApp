@@ -5,6 +5,6 @@ var gitHub = require('./services/github')
 
 module.exports = {
   setup: function(app) {
-    app.post('/api/users', db.getUser, gitHub.getUserToken, db.createUser)
+    app.post('/api/users', gitHub.getUserToken, db.getUser, db.createUser)
   } 
 }

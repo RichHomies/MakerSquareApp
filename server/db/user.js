@@ -8,10 +8,7 @@ var userSchema = new mongoose.Schema({
       studentOrAdminRights: {type: String, default: ''},
       cohort: {type: String , default: ''}
     },
-    tokens: {
-      github: {type: String, default: ''}
-    },
-    code: {type: String , default: ''},
+    githubId: type: String,
     creationDate :  {type: Date, default: Date.now()}
 });
 
