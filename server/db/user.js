@@ -8,7 +8,7 @@ var userSchema = new mongoose.Schema({
       studentOrAdminRights: {type: String, default: ''},
       cohort: {type: String , default: ''}
     },
-    githubId: type: String,
+    githubId: Number,
     creationDate :  {type: Date, default: Date.now()}
 });
 

@@ -41,14 +41,17 @@ function createUser (req, res){
     role : {
       studentOrAdminRights : isAlexJeng,
     },
-    githubId : req.githubId
+    githubId : res.githubId
   }
   console.log('github profile saving to db',  userGithubProfile)
   saveToDb(User, userGithubProfile)
     .then(function(user){
-      user.tokens.github = null
       res.status(200).json({user: user})
     })
+   .catch(function(err){
+	console.log('dafuq', err)
+  })
+
 }
 
 function save(type, data) {
