@@ -7,7 +7,9 @@ var opts = {
   platform: 'darwin',
   version: '0.35.4',
   arch: 'x64',
-  icon: './atom.icns'
+  icon: './atom.icns',
+  ignore: "electron/node_modules/(electron-packager|electron-prebuilt)"
+
 }
 
 packager(opts, function done (err, appPath) { 

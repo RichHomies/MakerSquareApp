@@ -6,6 +6,10 @@ const BrowserWindow = electron.BrowserWindow;  // Module to create native browse
 const ipcMain = electron.ipcMain;
 const init = require('./init');
 const ipcChannel = require('./ipcChannel');
+var ipcChannelPromise;
+var notificationCount = 0
+let mainWindow;
+
 
 function clearLocalStorage(webContents){
   webContents.session.cookies.remove({
@@ -16,30 +20,7 @@ function clearLocalStorage(webContents){
   })
 }
 
-// Report crashes to our server.
-electron.crashReporter.start();
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-
-var notificationCount = 0
-
-// Quit when all windows are closed.
-app.on('window-all-closed', function() {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform != 'darwin') {
-    app.quit();
-  }
-});
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-app.on('ready', function() {
-  // Create the Browser window.
-  mainWindow = new BrowserWindow({width: 1000, height: 600});
-  var ipcChannelPromise = ipcChannel.initializeChannel(ipcMain, mainWindow.webContents)
+function initializeElectronNotifications(){
   ipcMain.on('notification-inc', function(event, arg) {
     console.log('recieved notification-inc arg', arg)
     if (!arg.initialCall) {
@@ -50,15 +31,20 @@ app.on('ready', function() {
       app.dock.setBadge(notificationCount.toString())
     }
   })
+}
+
+function initializeMainWindow(){
+  mainWindow = new BrowserWindow({width: 1000, height: 600});
+  ipcChannelPromise = ipcChannel.initializeChannel(ipcMain, mainWindow.webContents)
 
   mainWindow.webContents.on('did-stop-loading', function(event, url) {
-    var urlArray = mainWindow.webContents.getURL().split('electron/public/')
-    var currentWindowLocation = urlArray[urlArray.length - 1]
+    let urlArray = mainWindow.webContents.getURL().split('electron/public/')
+    let currentWindowLocation = urlArray[urlArray.length - 1]
     console.log('url ', url)
-    if (currentWindowLocation.indexOf('landing.html') !== -1) {
+    if (currentWindowLocation.indexOf('index.html') !== -1) {
       init.init(mainWindow)
       .then(function(code){
-        console.log('back in indexjs with the code - fixing to load index', code)
+        console.log('back in indexjs with the code - fixing to load', code)
         mainWindow.loadURL(`file://${__dirname}/public/index.html`);
         ipcChannelPromise
         .then(function(eventArgsObjs){
@@ -67,20 +53,15 @@ app.on('ready', function() {
           eventArgsObjs.event.sender.send('asynchronous-reply', eventArgsObjs.arg)
         })
       })
+    } 
 
-    } else {
-      console.log('dam son')
-    }
   })
 
-  mainWindow.loadURL(`file://${__dirname}/public/landing.html`);
-
+  mainWindow.loadURL(`file://${__dirname}/public/index.html`);
   mainWindow.webContents.openDevTools();
-
-  var focused = true
-
+  let focused = true
   mainWindow.on('focus', function() {
-    focused = true
+      focused = true
     notificationCount = 0 //resets the new notification count when app is focused
     app.dock.setBadge('')
 
@@ -92,13 +73,23 @@ app.on('ready', function() {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
     mainWindow = null;
   });
+}
+
+
+electron.crashReporter.start();
+
+app.on('window-all-closed', function() {
+  if (process.platform != 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('ready', function() {
+  initializeElectronNotifications()
+  initializeMainWindow()
 });
 
 
 
- 

@@ -8,6 +8,7 @@ const githubUrl = 'https://github.com/login/oauth/authorize?'
 const authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scopes
 const callbackUrl = 'http://54.201.227.250/auth/callback?'
 const i = 0;
+var isLoaded = false;
 
 //////////////////////////////////////////////////////////
 //Code GraveYard - Start
@@ -81,13 +82,14 @@ function directToGithub (mainWindow){
       }
     })
     console.log('directing to github')
+
     mainWindow.loadURL(authUrl);
     mainWindow.show();
   })
   return githubCodePromise;
 }
 
-function init (mainWindow) {  
+function init (mainWindow) {
   console.log('initializing directing to github')
   return directToGithub(mainWindow)
   .then(function(code){
