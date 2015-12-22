@@ -43,12 +43,9 @@ class Home extends React.Component {
             </a>
           </div>
 
-          <div className="pusher">
-            <div className="ui grid">
+          <div id="container">
               <LinkHome />
               <AnnouncementHome />
-            </div>
-
           </div>
         
 

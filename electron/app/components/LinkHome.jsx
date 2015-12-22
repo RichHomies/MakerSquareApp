@@ -91,31 +91,28 @@ class LinkHome extends React.Component {
     var links = this.state.links.map(function(link, i){
       return (
         <div key={i} className='event'>
-          <div className="label">
-            <img src={link.avatar_url} />
-          </div>
           <div className="content">
             <div className="summary">
               <div className="user">
-                {link.name}
-              </div> posted a link: <div className="link" onClick={that.openLink.bind(this, link.url)}>{link.text}</div>
-              <div className="date">
-                {moment.utc(link.creationDate).format('MMM Do h:mmA')}
+                <button className="ui button" onClick={that.removeLink.bind(that, link._id)}>
+                x
+                </button>
+                <span className="link" onClick={that.openLink.bind(this, link.url)}>{link.text}</span>
               </div>
-              <button className="ui button" onClick={that.removeLink.bind(that, link._id)}>
-              x
-              </button>
             </div>
           </div>
         </div>
         )
     })
     return (
-      <div className="six wide column">
-        <Loader loaded={this.state.linkLoaded}>
-          {adminPost}
-          <div className="ui feed">{links}</div>
-        </Loader>
+      <div id='linksContainer'>
+        <div id="links">
+          <Loader loaded={this.state.linkLoaded}>
+            {adminPost}
+            <div><h3>Useful Links</h3></div>
+            <div className="ui feed">{links}</div>
+          </Loader>
+        </div>
       </div>
       )
   }
