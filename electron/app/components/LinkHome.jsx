@@ -88,11 +88,12 @@ class LinkHome extends React.Component {
           </form>
       )
 
-    var deleteBtn = alt.stores.HomeStore.state.studentOrAdmin !== "admin" ?  null : (<button className="ui button" onClick={that.removeLink.bind(that, link._id)}>
-                x
-                </button>);
+   
     
     var links = this.state.links.map(function(link, i){
+      var deleteBtn = alt.stores.HomeStore.state.studentOrAdmin !== "admin" ?  null : (<button className="ui button" onClick={that.removeLink.bind(that, link._id)}>
+                  x
+                  </button>);
       return (
         <div key={i} className='event'>
           <div className="content">
