@@ -83,7 +83,6 @@ app.on('ready', function() {
 
   mainWindow.loadURL(`file://${__dirname}/public/landing.html`);
 
-  mainWindow.webContents.openDevTools();
 
   var focused = true
 

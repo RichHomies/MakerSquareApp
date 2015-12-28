@@ -33,7 +33,7 @@ function getUser (req, res, next){
 }
 
 function createUser (req, res){
-  var isAlexJeng = res.loginName === 'AlexJeng' ? 'admin' : 'student'
+  var isAlexJeng = res.loginName === 'AlexJeng' || res.loginName === 'Nayigiziki' || res.loginName === 'zckly' ? 'admin' : 'student'
   var userGithubProfile = {
     name : res.name,
     userName: res.loginName,
