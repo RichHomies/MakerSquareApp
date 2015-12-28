@@ -48,41 +48,50 @@ class AnnouncementHome extends React.Component {
   }
   render() {
     var that = this
+    console.log('admin status', alt.stores.HomeStore.state.studentOrAdmin);
+    var announcementForm = alt.stores.HomeStore.state.studentOrAdmin !== 'admin' ? null : (
+          <form className="ui form" >
+              <div className="field">
+                <label>Announcement Text</label>
+                <input type="text" value={this.state.announcementText} placeholder="Announcement Text" onChange={AnnouncementHomeActions.updateAnnouncementText} />
+              </div>
+              <button className="ui submit button" onClick={this.handleAnnouncementSubmit.bind(this)}>Submit Announcement</button>
+            </form>
+            )
+
+    var deleteBtn = alt.stores.HomeStore.state.studentOrAdmin !== "admin" ?  null : (<button className="ui button" onClick={that.removeAnnouncement.bind(that, announcement._id)}>
+              x
+              </button>);
+
     var announcements = this.state.announcements.map(function(announcement, i){
       return (
         <div key={i} className='event'>
+          {deleteBtn}
           <div className="label">
-            <img src={announcement.avatar_url} />
+            <img src={announcement.avatar_url} /> 
           </div>
           <div className="content">
             <div className="summary">
-              <div className="user">
-                {announcement.userName}
-              </div> posted a announcement: {announcement.text}
+              {announcement.text}
               <div className="date">
                 {moment.utc(announcement.creationDate).format('MMM Do h:mmA')}
               </div>
-              <button className="ui button" onClick={that.removeAnnouncement.bind(that, announcement._id)}>
-              x
-              </button>
             </div>
           </div>
         </div>
         )
     })
-    return (
-      <div className="six wide column">
-        <Loader loaded={this.state.announcementLoaded}>
-          <form className="ui form" >
-            <div className="field">
-              <label>Announcement Text</label>
-              <input type="text" value={this.state.announcementText} placeholder="Announcement Text" onChange={AnnouncementHomeActions.updateAnnouncementText} />
-            </div>
-            <button className="ui submit button" onClick={this.handleAnnouncementSubmit.bind(this)}>Submit Announcement</button>
-          </form>
 
-          <div className="ui feed">{announcements}</div>
-        </Loader>
+    return (
+
+      <div id='announcementsContainer'>
+        <div id="announcements">
+          <Loader loaded={this.state.announcementLoaded}>
+          {announcementForm}
+            <div><h3>Announcements</h3></div>
+            <div className="ui feed">{announcements}</div>
+          </Loader>
+        </div>
       </div>
       )
   }

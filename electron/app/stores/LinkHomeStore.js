@@ -1,5 +1,7 @@
 import alt from '../alt';
 import LinkHomeActions from '../actions/LinkHomeActions';
+const ipcRenderer = require('electron').ipcRenderer;
+
 
 class LinkHomeStore {
   constructor() {
@@ -21,6 +23,7 @@ class LinkHomeStore {
     this.linkSubj = event.target.value
   }
   onUpdateLinks(links) {
+    ipcRenderer.send('notification-inc', {type: 'link'})
     this.links = links.links.reverse()
     var subjectObj = {}
     for (var link in this.links) {

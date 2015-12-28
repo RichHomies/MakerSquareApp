@@ -81,11 +81,23 @@ function directToGithub (mainWindow){
         reject(null)
       }
     })
+
+    mainWindow.webContents.on('will-navigate', function (event, url) {
+      console.log('url', url)
+      if (url.indexOf(callbackUrl) !== -1) {
+        console.log('got the code!')
+        resolve({code: url.split('=')[1]})
+      } else {
+        reject(null)
+      }
+    })
     console.log('directing to github')
 
     mainWindow.loadURL(authUrl);
     mainWindow.show();
   })
+
+
   return githubCodePromise;
 }
 
