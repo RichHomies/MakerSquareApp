@@ -1,5 +1,6 @@
 import alt from '../alt';
 import AnnouncementHomeActions from '../actions/AnnouncementHomeActions';
+const ipcRenderer = require('electron').ipcRenderer;
 
 class AnnouncementHomeStore {
   constructor() {
@@ -12,6 +13,7 @@ class AnnouncementHomeStore {
     this.announcementText = event.target.value
   }
   onUpdateAnnouncements(announcements) {
+    ipcRenderer.send('notification-inc', {type: 'announcement'})
     this.announcements = announcements.announcements.reverse()
     this.announcementText = ''
     this.announcementLoaded = true

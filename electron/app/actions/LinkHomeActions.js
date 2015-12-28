@@ -1,5 +1,4 @@
 import alt from '../alt';
-const ipcRenderer = require('electron').ipcRenderer;
 
 function formatLinkObject(text, url, subj, username, _id, avatar_url){
   return {
@@ -22,7 +21,6 @@ class LinkHomeActions {
       )
   }
   postLink(text, url, subj) {    
-    ipcRenderer.send('notification-inc', {type: 'link'})
     var linkObject = formatLinkObject(text, url, subj, alt.stores.HomeStore.state.name, alt.stores.HomeStore.state._id, alt.stores.HomeStore.state.avatar_url)
     socket.emit('saveLinkToDb', linkObject)
   }

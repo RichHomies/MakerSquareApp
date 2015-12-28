@@ -70,9 +70,8 @@ class LinkHome extends React.Component {
 
   render() {
     var that = this
-    var adminPost = null
-    if (alt.stores.HomeStore.state.studentOrAdmin === "student") {
-      adminPost = <form className="ui form" >
+    var linkForm = alt.stores.HomeStore.state.studentOrAdmin !== "admin" ?  null : (
+        <form className="ui form" >
             <div className="field">
               <label>Link Text</label>
               <input type="text" value={this.state.linkText} placeholder="Link Text" onChange={LinkHomeActions.updateLinkText} />
@@ -87,16 +86,19 @@ class LinkHome extends React.Component {
             </div>
             <button className="ui submit button" onClick={this.handleLinkSubmit.bind(this)}>Submit Link</button>
           </form>
-    }
+      )
+
+    var deleteBtn = alt.stores.HomeStore.state.studentOrAdmin !== "admin" ?  null : (<button className="ui button" onClick={that.removeLink.bind(that, link._id)}>
+                x
+                </button>);
+    
     var links = this.state.links.map(function(link, i){
       return (
         <div key={i} className='event'>
           <div className="content">
             <div className="summary">
               <div className="user">
-                <button className="ui button" onClick={that.removeLink.bind(that, link._id)}>
-                x
-                </button>
+                {deleteBtn}
                 <span className="link" onClick={that.openLink.bind(this, link.url)}>{link.text}</span>
               </div>
             </div>
@@ -108,7 +110,7 @@ class LinkHome extends React.Component {
       <div id='linksContainer'>
         <div id="links">
           <Loader loaded={this.state.linkLoaded}>
-            {adminPost}
+            {linkForm}
             <div><h3>Useful Links</h3></div>
             <div className="ui feed">{links}</div>
           </Loader>

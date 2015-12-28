@@ -27,7 +27,7 @@ function initializeElectronNotifications(){
       console.log('in here')
       notificationCount++
     }
-    if (notificationCount > 0) {
+    if (!mainWindow.isFocused() && notificationCount > 0) {
       app.dock.setBadge(notificationCount.toString())
     }
   })
@@ -36,6 +36,14 @@ function initializeElectronNotifications(){
 function initializeMainWindow(){
   mainWindow = new BrowserWindow({width: 1000, height: 600});
   ipcChannelPromise = ipcChannel.initializeChannel(ipcMain, mainWindow.webContents)
+
+
+
+  app.on('activate', function(event){
+    console.log('clicked!');
+    mainWindow.show();
+  })
+
 
   mainWindow.webContents.on('did-stop-loading', function(event, url) {
     let urlArray = mainWindow.webContents.getURL().split('electron/public/')
@@ -75,20 +83,12 @@ function initializeMainWindow(){
   mainWindow.on('closed', function() {
     mainWindow = null;
   });
-}
 
-
-electron.crashReporter.start();
-
-app.on('window-all-closed', function() {
-  if (process.platform != 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('ready', function() {
-  initializeElectronNotifications()
-  initializeMainWindow()
+  mainWindow.on('close', function(e) {
+    e.preventDefault();
+    console.log('hiding')
+    mainWindow.hide();
+  });
 });
 
 
